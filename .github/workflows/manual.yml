@@ -1,0 +1,15 @@
+name: Container Scan
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the container image
+      run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+    - uses: anchore/scan-action@v2
+      with:
+        image: "localbuild/testimage:latest"
+        fail-build: true
+    - name: grype scan JSON results
+      run: for j in `ls ./anchore-reports/*.json`; do echo "---- ${j} ----"; cat ${j}; echo; done
