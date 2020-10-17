@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  mongodbhttpproxy:
+    image: mongodbhttpproxy
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3330:3330
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
