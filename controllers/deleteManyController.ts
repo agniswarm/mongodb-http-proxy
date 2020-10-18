@@ -1,24 +1,17 @@
 import { Request, Response } from 'express';
-import {
-  CollectionAggregationOptions,
-  CollectionInsertManyOptions,
-  Db,
-} from 'mongodb';
+import { CommonOptions } from 'mongodb';
 import { getMongoClient } from '..';
 
-export const aggregateController = async (req: Request, res: Response) => {
+export const deleteManyController = async (req: Request, res: Response) => {
   try {
     const client = getMongoClient();
     const result = await client
       .db(req.body?.database)
       .collection(req.body.collection)
-      .aggregate(
-        req.body.pipeline,
-        req.body.options as CollectionAggregationOptions
-      )
-      .toArray();
-
-    res.status(200).send(result);
+      .deleteMany(req.body.filter, req.body.options as CommonOptions);
+    res
+      .status(200)
+      .send({ deleteCount: result.deletedCount, result: result.result });
   } catch (e) {
     console.error(e);
     res.status(400).send({ code: e.code, message: e.message });
