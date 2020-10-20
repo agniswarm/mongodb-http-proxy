@@ -10,6 +10,7 @@ import { deleteManyMiddleware } from './middlewares/deleteManyMiddleware';
 import { deleteOneMiddleware } from './middlewares/deleteOneMiddlware';
 import { insertManyMiddleware } from './middlewares/insertManyMiddleware';
 import { insertOneMiddleware } from './middlewares/insertOneMiddleware';
+import { validateRequest } from './middlewares/validateRequest';
 
 export const app = express();
 
@@ -18,6 +19,7 @@ app.use(urlencoded({ extended: false }));
 
 // parse application/json
 app.use(json());
+app.use(validateRequest);
 
 app.post('/insertOne', insertOneMiddleware, insertOneController);
 app.post('/insertMany', insertManyMiddleware, insertManyController);

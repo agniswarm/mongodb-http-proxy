@@ -1,7 +1,8 @@
 import { app } from './express';
 import { connect, MongoClient } from 'mongodb';
+import { generateToken } from './lib/security';
 
-const port = process.env.PORT || 3330;
+const port = 3330;
 
 let mongoClient: MongoClient;
 
@@ -14,6 +15,7 @@ connect(process.env.MONGO_URL!, {
 })
   .then((client: MongoClient) => {
     mongoClient = client;
+    generateToken();
     app.listen(port, () =>
       console.log(`listening on http://localhost:${port}`)
     );
